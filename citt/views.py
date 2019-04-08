@@ -1,13 +1,13 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 from django.urls import reverse
 from .models import Alumno
 from .forms import AlumnoForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-
+from .resources import AlumnoResource
 def login_view(request):
     context = {}
     if request.method == 'POST':
@@ -34,6 +34,7 @@ def logout_view(request):
 def registro_view(request):
     context = {}
     ruts = Alumno.objects.all()
+
     if request.method == 'POST':
         rutAlumno = request.POST.get('txtrut',True)
         elrutexiste = False
@@ -84,6 +85,15 @@ def eliminar_view(request,pk):
     alumno.delete()
 
     return redirect('listar')
+
+@login_required(login_url='login')
+def export_csv(request):
+    alumno_resource = AlumnoResource()
+    dataset = alumno_resource.export()
+    response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="alumnos.xls"'
+    return response
+ 
 
 
 

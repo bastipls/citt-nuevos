@@ -10,4 +10,5 @@ urlpatterns = [
     path('listar/',views.listar_view, name='listar'),
     path('listar/modificar/<str:pk>/',views.modificar_view, name='modificar'),
     path('listar/modificar/<str:pk>/eliminar/',views.eliminar_view, name='eliminar'),
+    path('export_xls/',views.export_csv, name ='export_xls'),
 ]
