@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
     <link rel="stylesheet" href="{% static 'css/ingreso.css' %}">
+    <link rel="icon" href="{% static 'img/fav-icon.png' %}">
     <title>Registro</title>
 </head>
 <body>
@@ -30,14 +31,15 @@
         </nav>
     </div>
     <div class="general-container">
-        <form method="POST" class="container-input">{% csrf_token %}
+        <form method="POST" id="nameForm" class="container-input">{% csrf_token %}
             <div class="imagen-citt">
                 <img class="wow flipInY" src="{% static 'img/CITT.png' %}" alt="Logo citt">
             </div>
-            <input name='txtrut' placeholder="Ingrese rut" type="text" required>
+            <input name='txtrut' id="txtName" maxlength="10" onkeyup="this.value=soloRut(this.value)" placeholder="Ingrese rut" type="text" required>
             <button class="wow pulse" type="submit">Registrar</button>
         </form>
     </div>
+    <script src="{% static 'js/pistol.js'%}"></script>
     <script src="{% static 'js/wow.js' %}"></script>
     <script>
             new WOW().init();

@@ -11,7 +11,7 @@ from .resources import AlumnoResource
 def login_view(request):
     context = {}
     if request.method == 'POST':
-        username = request.POST['txtuser']
+        username = request.POST['txtuser'].lower()
         password = request.POST['txtpass']
         user = authenticate(request,username = username, password=password)
         if user:
