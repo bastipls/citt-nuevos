@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="es">
+    {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-    <link rel="stylesheet" href="{% static 'css/ingreso.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modificar.css' %}">
     <link rel="icon" href="{% static 'img/fav-icon.png' %}">
-    <title>Registro</title>
+    <title>Modificar evento</title>
 </head>
 <body>
     <div class="menu-container wow fadeIn">
@@ -19,7 +19,7 @@
         </div>
         <nav id="navegador">
             <ul>
-                <li><a href="{% url 'registro' %}" class="item-link selected wow fadeIn" data-wow-duration='2s'>Ingresar</a></li>
+                <li><a href="{% url 'registro' %}" class="item-link wow fadeIn" data-wow-duration='2s'>Ingresar</a></li>
                 <li><a href="{% url 'listar' %}" class="item-link wow fadeIn" data-wow-duration='2s'>Ingresados</a></li>
                 <li>
                     <form  action="{% url 'logout' %}" method="post">
@@ -31,27 +31,15 @@
         </nav>
     </div>
     <div class="general-container">
-        <form method="POST" id="nameForm" class="container-input">{% csrf_token %}
-            <div class="event-datalist-container">
-                    <label for="datalist-event">Elegir evento:</label>
-                    <input name="txteventoasiste" id="datalist-event"  value="{{ eventoAsisteGlobal }}" list="eventos">
-                    <datalist id="eventos">
-                        {% for evento in eventos%}
-                        <option >{{ evento.nombre_evento }} </option>
-                        {% endfor %}
-                    </datalist>
-                    <a id="create-event" href="{% url 'crear_evento' %}">Crear Evento</a>
-            </div>
-           
-            <h2 id="event-now"></h2>
+        <form  method="POST" enctype="multipart/form-data" class="container-input" >{% csrf_token %}
             <div class="imagen-citt">
-                <img class="wow flipInY" src="{% static 'img/CITT.png' %}" alt="Logo citt">
+                <img src="{% static 'img/CITT.png' %}" alt="Logo citt">
             </div>
-            <input name='txtrut' class="input-citt" id="txtName" maxlength="10" onkeyup="this.value=soloRut(this.value)" placeholder="Ingrese rut" type="text" required>
-            <button class="wow pulse" type="submit">Registrar</button>
+            {{ form.nombre_evento }}
+            <button value="OK"  type="submit">Actualizar</button>
+            <a href="eliminar" id="delete">Eliminar</a>
         </form>
     </div>
-    <script src="{% static 'js/pistol.js'%}"></script>
     <script src="{% static 'js/wow.js' %}"></script>
     <script>
             new WOW().init();

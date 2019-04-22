@@ -3,11 +3,13 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect,HttpResponse
 from django.urls import reverse
-from .models import Alumno
-from .forms import AlumnoForm
+from .models import Alumno,Evento
+from .forms import AlumnoForm,EventoForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .resources import AlumnoResource
+
+eventoAsisteGlobal = "Seleccione evento"
 def login_view(request):
     context = {}
     if request.method == 'POST':
@@ -32,28 +34,59 @@ def logout_view(request):
     return redirect('login')
 @login_required(login_url='login')
 def registro_view(request):
-    context = {}
+    global eventoAsisteGlobal
+    eventos = Evento.objects.values('nombre_evento')
     ruts = Alumno.objects.all()
 
     if request.method == 'POST':
         rutAlumno = request.POST.get('txtrut',True)
-        elrutexiste = False
-        for i in ruts:
-            if rutAlumno == i.rut_alumno:
-                elrutexiste = True
-        if elrutexiste == False:
-            atributos = Alumno(rut_alumno =rutAlumno) 
-            atributos.save()
-        else:
-            return redirect('error')
+        eventoAsiste = request.POST.get('txteventoasiste',True)
+        
+        eventoThere = Evento.objects.filter(nombre_evento=eventoAsiste).exists()
+        alu = Alumno.objects.filter(rut_alumno=rutAlumno).filter(evento_asistio_alumno=eventoAsiste).exists()
         
 
-
+         
+        if alu == False:
+            if eventoThere == True:
+                atributos = Alumno(rut_alumno =rutAlumno,evento_asistio_alumno = eventoAsiste) 
+                eventoAsisteGlobal = eventoAsiste
+                atributos.save()
+            else:
+                return redirect('error_evento')
+        else:
+            return redirect('error')
+    context = {'eventos':eventos,
+                'eventoAsisteGlobal':eventoAsisteGlobal}            
     return render(request,'citt/registro.html',context)
+
+
+@login_required(login_url='login')
+def crear_evento_view(request):
+    global eventoAsisteGlobal
+    if request.method == 'POST':
+        nombreEvento = request.POST.get('txtevent',True)
+        eventoAsisteGlobal = nombreEvento
+        atributos = Evento(nombre_evento = nombreEvento)
+        atributos.save()
+    todos_eventos = Evento.objects.all()
+    query = request.GET.get('q') 
+    
+    if query:
+        todos_eventos = todos_eventos.filter(
+                                            Q(nombre_evento__icontains=query)         
+                                           )
+    context = {'todos_eventos':todos_eventos}  
+    return render(request, 'citt/evento.html',context)
+
+
 @login_required(login_url='login')  
 def error_view(request):
     context = {}
     return render(request,'citt/error.html',context) 
+def error_evento_view(request):
+    context = {}
+    return render(request,'citt/error_evento.html',context) 
  
 @login_required(login_url='login')
 def listar_view(request):
@@ -63,7 +96,7 @@ def listar_view(request):
         
         todos_ruts = todos_ruts.filter(
                                         Q(rut_alumno__icontains=query)
-                                    )
+                                        )
     context = {'todos_ruts':todos_ruts}
     return render(request,'citt/listar.html',context)
 @login_required(login_url='login')
@@ -79,6 +112,27 @@ def modificar_view(request,pk):
         form = AlumnoForm(instance = alumno)
     context = {'form':form}
     return render(request,'citt/modificar.html',context)
+
+@login_required(login_url='login')
+def modificar_evento_view(request,pk):
+    evento = get_object_or_404(Evento,pk=pk)
+    if request.method == 'POST':
+       form = EventoForm(request.POST,instance=evento) 
+       if form.is_valid():
+           evento = form.save(commit=False)
+           evento.save()
+           return redirect('crear_evento')
+    else:
+        form = EventoForm(instance = evento)
+    context = {'form':form }
+    return render(request,'citt/modificar_evento.html',context)
+
+@login_required(login_url='login')
+def eliminar_evento_view(request,pk):
+    evento = get_object_or_404(Evento,pk=pk)
+    evento.delete()
+    return redirect('crear_evento')
+
 @login_required(login_url='login')
 def eliminar_view(request,pk):
     alumno = get_object_or_404(Alumno,pk=pk)
@@ -92,6 +146,7 @@ def export_csv(request):
     dataset = alumno_resource.export()
     response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="alumnos.xls"'
+
     return response
  
 
