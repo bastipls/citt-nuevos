@@ -33,13 +33,17 @@
     <div class="general-container">
         <form method="GET" class="search-container wow fadeIn" data-wow-duration='2s'>
             <a id='exportar' href="{% url 'export_xls' %}">Exportar</a>
-            <input name="q"  value="{{ request.GET.q }}" type="search" class="wow fadeIn" data-wow-duration="2s"  placeholder="Buscar rut">
+            <input name="q"  value="{{ request.GET.q }}" type="search" class="wow fadeIn" data-wow-duration="2s"  placeholder="Buscar rut\Evento">
             <button class="wow fadeIn" data-wow-duration="2s">Buscar</button>
         </form>
         <div class="info-container">
             {% for alumno in todos_ruts %}
             <div class="student-container wow flipInY">
-                    <div class="rut-info"><p>{{ alumno.rut_alumno }}</p></div>
+                
+                    <div class="rut-info">
+                        <p id="event-assist">Evento: {{ alumno.evento_asistio_alumno }}</p>
+                        <p>{{ alumno.rut_alumno }}</p>
+                    </div>
                     <a id="edit-student" href="{% url 'modificar' pk=alumno.pk %}">Editar</a>
             </div>  
             {% endfor %}

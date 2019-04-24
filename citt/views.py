@@ -40,16 +40,28 @@ def registro_view(request):
 
     if request.method == 'POST':
         rutAlumno = request.POST.get('txtrut',True)
-        eventoAsiste = request.POST.get('txteventoasiste',True)
+        #httpsÑ--portal.sidiv.registrocivil.cl-docstatus_RUN¿20057170'3/type¿CEDULA/serial¿108608430/mrz¿108608430298112232111223
+
+        #Todo este metodo del rut es solo para scanners en ingles
+        if rutAlumno[0].lower() == 'h':
+          nuevoRut = rutAlumno.split('¿')[1].replace('/type','').replace("'","-")
+          
+        else:
+           nuevoRut = rutAlumno.replace("'","-")
         
+        if nuevoRut.find('-') == 7:
+              nuevoRut = nuevoRut[:-1]
+
+        eventoAsiste = request.POST.get('txteventoasiste',True)
+    
         eventoThere = Evento.objects.filter(nombre_evento=eventoAsiste).exists()
-        alu = Alumno.objects.filter(rut_alumno=rutAlumno).filter(evento_asistio_alumno=eventoAsiste).exists()
+        alu = Alumno.objects.filter(rut_alumno=nuevoRut).filter(evento_asistio_alumno=eventoAsiste).exists()
         
 
          
         if alu == False:
             if eventoThere == True:
-                atributos = Alumno(rut_alumno =rutAlumno,evento_asistio_alumno = eventoAsiste) 
+                atributos = Alumno(rut_alumno =nuevoRut,evento_asistio_alumno = eventoAsiste) 
                 eventoAsisteGlobal = eventoAsiste
                 atributos.save()
             else:
@@ -95,7 +107,8 @@ def listar_view(request):
     if query:
         
         todos_ruts = todos_ruts.filter(
-                                        Q(rut_alumno__icontains=query)
+                                        Q(rut_alumno__icontains=query ) |
+                                        Q(evento_asistio_alumno= query)
                                         )
     context = {'todos_ruts':todos_ruts}
     return render(request,'citt/listar.html',context)
@@ -110,7 +123,8 @@ def modificar_view(request,pk):
             return redirect('listar')
     else:
         form = AlumnoForm(instance = alumno)
-    context = {'form':form}
+    context = {'form':form,
+                'alumno':alumno}
     return render(request,'citt/modificar.html',context)
 
 @login_required(login_url='login')
@@ -124,7 +138,8 @@ def modificar_evento_view(request,pk):
            return redirect('crear_evento')
     else:
         form = EventoForm(instance = evento)
-    context = {'form':form }
+    context = {'form':form,
+                'evento':evento }
     return render(request,'citt/modificar_evento.html',context)
 
 @login_required(login_url='login')
