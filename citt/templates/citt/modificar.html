@@ -35,6 +35,7 @@
             <div class="imagen-citt">
                 <img src="{% static 'img/CITT.png' %}" alt="Logo citt">
             </div>
+            <p id="event-now"> Evento: {{ alumno.evento_asistio_alumno }}</p>
             {{ form.rut_alumno }}
             <button value="OK"  type="submit">Actualizar</button>
             <a href="eliminar" id="delete">Eliminar</a>

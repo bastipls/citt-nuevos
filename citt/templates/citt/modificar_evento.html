@@ -34,7 +34,7 @@
         <form  method="POST" enctype="multipart/form-data" class="container-input" >{% csrf_token %}
             <div class="imagen-citt">
                 <img src="{% static 'img/CITT.png' %}" alt="Logo citt">
-            </div>
+            </div>     
             {{ form.nombre_evento }}
             <button value="OK"  type="submit">Actualizar</button>
             <a href="eliminar" id="delete">Eliminar</a>

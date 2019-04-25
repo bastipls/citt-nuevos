@@ -108,13 +108,14 @@ def listar_view(request):
         
         todos_ruts = todos_ruts.filter(
                                         Q(rut_alumno__icontains=query ) |
-                                        Q(evento_asistio_alumno= query)
+                                        Q(evento_asistio_alumno__icontains= query)
                                         )
     context = {'todos_ruts':todos_ruts}
     return render(request,'citt/listar.html',context)
 @login_required(login_url='login')
 def modificar_view(request,pk):
     alumno = get_object_or_404(Alumno,pk=pk)
+  
     if request.method == 'POST':
         form = AlumnoForm(request.POST,instance=alumno)
         if form.is_valid():
@@ -124,7 +125,7 @@ def modificar_view(request,pk):
     else:
         form = AlumnoForm(instance = alumno)
     context = {'form':form,
-                'alumno':alumno}
+                'alumno':alumno }
     return render(request,'citt/modificar.html',context)
 
 @login_required(login_url='login')

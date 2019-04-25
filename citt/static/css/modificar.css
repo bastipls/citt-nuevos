@@ -8,6 +8,11 @@
 .container-input img {
     margin-bottom: 30px;
 }
+#event-now{
+	margin-bottom: 10px;
+	font-weight: bold;
+	color:#0e1d2f;
+}
 .container-input input{
      height: 40px;
      width: 60%;
