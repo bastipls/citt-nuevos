@@ -36,10 +36,12 @@
                     <label for="datalist-event">Elegir evento:</label>
                     <input name="txteventoasiste" id="datalist-event"  value="{{ eventoAsisteGlobal }}" list="eventos">
                     <datalist id="eventos">
-                        {% for evento in eventos%}
-                        <option >{{ evento.nombre_evento }} </option>
+                        {% for evento in eventos %}
+                        <option value="{{ evento.nombre_evento }}">{{ evento.fecha_evento }}   </option>
+                       
                         {% endfor %}
                     </datalist>
+                    <input type="text"  name="txtfechaasiste" value="{{ date|date:'Y-m-d' }}" readonly id='fecha-evento'>
                     {% if user.is_superuser %}
                     <a id="create-event" href="{% url 'crear_evento' %}">Crear Evento</a>
                     {% endif %}

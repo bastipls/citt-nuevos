@@ -81,6 +81,10 @@
     transition: 1s all;
  
 }
+#fecha-evento{
+    background: none;
+    border: none;
+}
 .container-input input::placeholder{
     color: whitesmoke;
     opacity: 0.5;

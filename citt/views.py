@@ -8,6 +8,7 @@ from .forms import AlumnoForm,EventoForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required,user_passes_test
 from .resources import AlumnoResource
+from django.utils import timezone
 
 eventoAsisteGlobal = "Seleccione evento"
 def login_view(request):
@@ -35,9 +36,9 @@ def logout_view(request):
 @login_required(login_url='login')
 def registro_view(request):
     global eventoAsisteGlobal
-    eventos = Evento.objects.filter(estado_evento='Activo').values('nombre_evento')
+    eventos = Evento.objects.filter(estado_evento='Activo')
     ruts = Alumno.objects.all()
-
+    date = timezone.now
     if request.method == 'POST':
         rutAlumno = request.POST.get('txtrut',True)
         #httpsÑ--portal.sidiv.registrocivil.cl-docstatus_RUN¿20057170'3/type¿CEDULA/serial¿108608430/mrz¿108608430298112232111223
@@ -53,13 +54,13 @@ def registro_view(request):
               nuevoRut = nuevoRut[:-1]
 
         eventoAsiste = request.POST.get('txteventoasiste',True)
-    
+        fechaAsiste = request.POST.get('txtfechaasiste',True)
         eventoThere = Evento.objects.filter(nombre_evento=eventoAsiste).filter(estado_evento='Activo').exists()
         alu = Alumno.objects.filter(rut_alumno=nuevoRut).filter(evento_asistio_alumno=eventoAsiste).exists()
 
         if alu == False:
             if eventoThere == True:
-                atributos = Alumno(rut_alumno =nuevoRut,evento_asistio_alumno = eventoAsiste) 
+                atributos = Alumno(rut_alumno =nuevoRut,evento_asistio_alumno = eventoAsiste,fecha_evento_asistio_alumno=fechaAsiste) 
                 eventoAsisteGlobal = eventoAsiste
                 atributos.save()
             else:
@@ -68,7 +69,8 @@ def registro_view(request):
         else:
             return redirect('error')
     context = {'eventos':eventos,
-                'eventoAsisteGlobal':eventoAsisteGlobal}            
+                'eventoAsisteGlobal':eventoAsisteGlobal,
+                'date':date}            
     return render(request,'citt/registro.html',context)
 
 

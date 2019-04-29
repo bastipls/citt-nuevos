@@ -44,6 +44,7 @@
                 
                     <div class="rut-info">
                         <p id="event-assist">Evento: {{ alumno.evento_asistio_alumno }}</p>
+                        <p id='date-assist'>{{ alumno.fecha_evento_asistio_alumno }}</p>
                         <p>{{ alumno.rut_alumno }}</p>
                     </div>
                     {% if user.is_superuser %}

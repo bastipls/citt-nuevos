@@ -97,6 +97,13 @@
     left:4px;
     opacity: 0.5;
 }
+#date-assist{
+    position: absolute;
+    font-size: 13px;
+    top: 3px;
+    right:4px;
+    opacity: 0.5;
+}
 #edit-student{
    width: 28%;
 
