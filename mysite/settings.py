@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '6(mx_(4pbg%kovg*kpb1m6e*&xqup0i+v&%1jl#4%*0izzr0z4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'cittnuevos.pythonanywhere.com']
 
@@ -111,4 +111,3 @@ SESSION_COOKIE_AGE = 14400
 SESSION_EXPIRE_AT_BROWSER_CLOSE= True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-DATETIME_INPUT_FORMATS += ('%Y-%m-%d %I:%M %p',)
