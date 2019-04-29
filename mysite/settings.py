@@ -114,5 +114,3 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE= True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-DATETIME_INPUT_FORMATS += ('%Y-%m-%d %I:%M %p',)
