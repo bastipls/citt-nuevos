@@ -32,7 +32,9 @@
     </div>
     <div class="general-container">
         <form method="GET" class="search-container wow fadeIn" data-wow-duration='2s'>
+            {% if user.is_superuser %}
             <a id='exportar' href="{% url 'export_xls' %}">Exportar</a>
+            {% endif %}
             <input name="q"  value="{{ request.GET.q }}" type="search" class="wow fadeIn" data-wow-duration="2s"  placeholder="Buscar rut\Evento">
             <button class="wow fadeIn" data-wow-duration="2s">Buscar</button>
         </form>
@@ -44,7 +46,12 @@
                         <p id="event-assist">Evento: {{ alumno.evento_asistio_alumno }}</p>
                         <p>{{ alumno.rut_alumno }}</p>
                     </div>
+                    {% if user.is_superuser %}
                     <a id="edit-student" href="{% url 'modificar' pk=alumno.pk %}">Editar</a>
+                    {% else %}
+
+                    {% endif %}
+
             </div>  
             {% endfor %}
                  

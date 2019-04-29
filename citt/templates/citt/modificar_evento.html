@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-    <link rel="stylesheet" href="{% static 'css/modificar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modificar_evento.css' %}">
     <link rel="icon" href="{% static 'img/fav-icon.png' %}">
     <title>Modificar evento: {{ evento }}</title>
 </head>
@@ -35,7 +35,10 @@
             <div class="imagen-citt">
                 <img src="{% static 'img/CITT.png' %}" alt="Logo citt">
             </div>     
+            {{ form.estado_evento }}
             {{ form.nombre_evento }}
+            {{ form.fecha_evento.errors }}
+            {{ form.fecha_evento }}
             <button value="OK"  type="submit">Actualizar</button>
             <a href="eliminar" id="delete">Eliminar</a>
         </form>

@@ -29,6 +29,7 @@
     margin-top: 10px;
     width: 100%;
     
+    
 }
 .container-create input{
     padding: 8px;
@@ -129,9 +130,23 @@
     color: whitesmoke;
     -webkit-box-shadow: inset -2px -1px 27px 2px rgba(0,0,0,0.12);
     -moz-box-shadow: inset -2px -1px 27px 2px rgba(0,0,0,0.12);
-    box-shadow: inset -2px -1px 27px 2px rgba(0,0,0,0.12)
+    box-shadow: inset -2px -1px 27px 2px rgba(0,0,0,0.12);
+    position: relative;
 }
-
+#status-event{
+    position: absolute;
+    font-size: 13px;
+    top: 3px;
+    left:4px;
+    opacity: 0.5;
+}
+#date-event{
+    position: absolute;
+    font-size: 13px;
+    top: 3px;
+    right:4px;
+    opacity: 0.5;
+}
 #edit-event{
    width: 28%;
 

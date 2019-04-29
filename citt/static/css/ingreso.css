@@ -77,8 +77,13 @@
     background: linear-gradient(20deg, #63305e 20%, #24d292 100%);
     border: 1px solid rgba(0, 0, 0, 0.6);
     color: whitesmoke;
+    opacity: 0.8;
     transition: 1s all;
  
+}
+.container-input input::placeholder{
+    color: whitesmoke;
+    opacity: 0.5;
 }
 .container-input img {
     margin-bottom: 30px;

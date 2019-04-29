@@ -48,7 +48,11 @@
 
                         {% for evento in todos_eventos %}
                         <div class="event-container wow flipInY">      
-                                <div class="event-info"><p>{{ evento.nombre_evento }}</p></div>
+                                <div class="event-info">
+                                    <p id="status-event">{{ evento.estado_evento }}</p>
+                                    <p id="date-event">{{ evento.fecha_evento }}</p>
+                                    <p>{{ evento.nombre_evento }}</p>
+                                </div>
                                 <a id="edit-event" href="{% url 'modificar_evento' pk=evento.pk %}">Editar</a>
                         </div>  
                         {% endfor %}

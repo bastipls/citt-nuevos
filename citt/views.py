@@ -6,7 +6,7 @@ from django.urls import reverse
 from .models import Alumno,Evento
 from .forms import AlumnoForm,EventoForm
 from django.db.models import Q
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from .resources import AlumnoResource
 
 eventoAsisteGlobal = "Seleccione evento"
@@ -35,7 +35,7 @@ def logout_view(request):
 @login_required(login_url='login')
 def registro_view(request):
     global eventoAsisteGlobal
-    eventos = Evento.objects.values('nombre_evento')
+    eventos = Evento.objects.filter(estado_evento='Activo').values('nombre_evento')
     ruts = Alumno.objects.all()
 
     if request.method == 'POST':
@@ -54,17 +54,16 @@ def registro_view(request):
 
         eventoAsiste = request.POST.get('txteventoasiste',True)
     
-        eventoThere = Evento.objects.filter(nombre_evento=eventoAsiste).exists()
+        eventoThere = Evento.objects.filter(nombre_evento=eventoAsiste).filter(estado_evento='Activo').exists()
         alu = Alumno.objects.filter(rut_alumno=nuevoRut).filter(evento_asistio_alumno=eventoAsiste).exists()
-        
 
-         
         if alu == False:
             if eventoThere == True:
                 atributos = Alumno(rut_alumno =nuevoRut,evento_asistio_alumno = eventoAsiste) 
                 eventoAsisteGlobal = eventoAsiste
                 atributos.save()
             else:
+                eventoAsisteGlobal = 'Seleccione evento'
                 return redirect('error_evento')
         else:
             return redirect('error')
@@ -73,7 +72,8 @@ def registro_view(request):
     return render(request,'citt/registro.html',context)
 
 
-@login_required(login_url='login')
+
+@user_passes_test(lambda u:u.is_superuser, login_url=('login'))
 def crear_evento_view(request):
     global eventoAsisteGlobal
     if request.method == 'POST':
@@ -112,7 +112,7 @@ def listar_view(request):
                                         )
     context = {'todos_ruts':todos_ruts}
     return render(request,'citt/listar.html',context)
-@login_required(login_url='login')
+@user_passes_test(lambda u:u.is_superuser, login_url=('login'))
 def modificar_view(request,pk):
     alumno = get_object_or_404(Alumno,pk=pk)
   
@@ -128,7 +128,7 @@ def modificar_view(request,pk):
                 'alumno':alumno }
     return render(request,'citt/modificar.html',context)
 
-@login_required(login_url='login')
+@user_passes_test(lambda u:u.is_superuser, login_url=('login'))
 def modificar_evento_view(request,pk):
     evento = get_object_or_404(Evento,pk=pk)
     if request.method == 'POST':
@@ -143,20 +143,20 @@ def modificar_evento_view(request,pk):
                 'evento':evento }
     return render(request,'citt/modificar_evento.html',context)
 
-@login_required(login_url='login')
+@user_passes_test(lambda u:u.is_superuser, login_url=('login'))
 def eliminar_evento_view(request,pk):
     evento = get_object_or_404(Evento,pk=pk)
     evento.delete()
     return redirect('crear_evento')
 
-@login_required(login_url='login')
+@user_passes_test(lambda u:u.is_superuser, login_url=('login'))
 def eliminar_view(request,pk):
     alumno = get_object_or_404(Alumno,pk=pk)
     alumno.delete()
 
     return redirect('listar')
 
-@login_required(login_url='login')
+@user_passes_test(lambda u:u.is_superuser, login_url=('login'))
 def export_csv(request):
     alumno_resource = AlumnoResource()
     dataset = alumno_resource.export()
